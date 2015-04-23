@@ -1,0 +1,18 @@
+[Unit]
+Description=Galera Cluster
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker kill galera-%i
+ExecStartPre=-/usr/bin/docker rm galera-%i
+ExecStartPre=/usr/bin/docker pull capttofu/percona_xtradb_cluster_5_6
+ExecStart=/usr/bin/docker run --name galera-%i -e "MYSQL_ROOT_PASSWORD=toor" -P capttofu/percona_xtradb_cluster_5_6 
+ExecStop=/usr/bin/docker stop galera-%i
+ExecStop=/usr/bin/docker rm galera-%i
+
+[X-Fleet]
+Conflicts=galera@*.service
+MachineMetadata=role=minion
