@@ -1,0 +1,11 @@
+[Unit]
+Description=Galera Announce
+BindsTo=galera@%i.service
+After=galera@%i.service
+
+[Service]
+ExecStart=/bin/sh -c "while true; do /usr/bin/etcdctl --peers 127.0.0.1:4001 set /galera/galera-%i $(/usr/bin/docker exec -i galera-%i /sbin/ifconfig eth0 | /usr/bin/grep 'inet addr:' | /usr/bin/cut -d: -f2 | /usr/bin/awk '{ print $1}') --ttl 60; sleep 45; done"
+ExecStop=/usr/bin/etcdctl --peers 127.0.0.1:4001 rm /galera/galera-%i
+
+[X-Fleet]
+MachineOf=galera@%i.service
