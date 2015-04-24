@@ -11,9 +11,10 @@ ExecStartPre=-/usr/bin/docker rm galera-%i
 ExecStartPre=/usr/bin/docker pull capttofu/percona_xtradb_cluster_5_6
 ExecStart=/usr/bin/docker run --name galera-%i \
     -e "GALERA_CLUSTER=true" \
-    -e "WSREP_SST_PASSWORD=sstuser:uu7aN4aaJ1oogh4eibie" \
-    -e "MYSQL_ROOT_PASSWORD=toor" \
-    -P capttofu/percona_xtradb_cluster_5_6 
+    -e "WSREP_SST_PASSWORD=sstuser:ieChie2reiHeey8Iech7voe2a" \
+    -e "MYSQL_ROOT_PASSWORD=ohpai0uegh2Rohdai0eephi2i" \
+    -p 4444:4444 -p 4567:4567 -p 4568:4568 -p 3306:3306 \
+    capttofu/percona_xtradb_cluster_5_6 
 ExecStop=/usr/bin/docker stop galera-%i
 ExecStop=/usr/bin/docker rm galera-%i
 
