@@ -17,6 +17,14 @@ There are multiple `fleet-units`
  - `galera@.service` = This starts up the Galera docker container
  - `galera-announce@.service` = Reports to etcd the internal IP
 
+## Warning 
+You really should change the default passwords within `galera@.service`. I haven't figured 
+out a good way to have `ansible` or `saltstack` be the actually process that 
+submits the `fleet-units`. So for now while I'm testing this is how the password
+are being done. 
+
+If you don't change them thats your call. These are just templates.
+
 ## Submitting fleet-unit files
 
 Submit the fleet-unit files in the following order.
