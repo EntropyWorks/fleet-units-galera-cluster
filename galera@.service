@@ -8,13 +8,14 @@ TimeoutStartSec=0
 EnvironmentFile=/etc/environment
 ExecStartPre=-/usr/bin/docker kill galera-%i
 ExecStartPre=-/usr/bin/docker rm galera-%i
-ExecStartPre=/usr/bin/docker pull capttofu/percona_xtradb_cluster_5_6
+ExecStartPre=/usr/bin/docker pull capttofu/percona_xtradb_cluster_5_6:coreos
 ExecStart=/usr/bin/docker run --name galera-%i \
     -e "GALERA_CLUSTER=true" \
+    -e FLEETCTL_ENDPOINT="__FLEETCTL_ETC_ENDPOINT__" \
     -e "WSREP_SST_PASSWORD=sstuser:__CHANGE_WSREP_SST_PASSWORD__" \
     -e "MYSQL_ROOT_PASSWORD=__CHANGE_MYSQL_ROOT_PASSWORD__" \
     -p 4444:4444 -p 4567:4567 -p 4568:4568 -p 3306:3306 \
-    capttofu/percona_xtradb_cluster_5_6 
+    capttofu/percona_xtradb_cluster_5_6:coreos
 ExecStop=/usr/bin/docker stop galera-%i
 ExecStop=/usr/bin/docker rm galera-%i
 
