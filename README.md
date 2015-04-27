@@ -10,6 +10,10 @@ the following fleet units to startup and configure your Galera Cluster.
  - fleet service
  - flannel service
 
+## Template needs modification
+
+The file galera@.template should be modified to reflect the proper endpoints you need.
+
 ## Fleet Units
 
 There are multiple `fleet-units` 
