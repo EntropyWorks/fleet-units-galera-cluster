@@ -11,6 +11,7 @@ ExecStartPre=-/usr/bin/docker rm galera-%i
 ExecStartPre=/usr/bin/docker pull capttofu/percona_xtradb_cluster_5_6:coreos
 ExecStart=/usr/bin/docker run --name galera-%i \
     -e "GALERA_CLUSTER=true" \
+    -e "ETCD_LISTEN_CLIENT_URLS=__ETC_LISTEN_CLIENT_URLS__" \
     -e "FLEETCTL_ENDPOINT=__FLEETCTL_ETC_ENDPOINT__" \
     -e "WSREP_SST_PASSWORD=__CHANGE_WSREP_SST_PASSWORD__" \
     -e "MYSQL_ROOT_PASSWORD=__CHANGE_MYSQL_ROOT_PASSWORD__" \
@@ -18,6 +19,11 @@ ExecStart=/usr/bin/docker run --name galera-%i \
     capttofu/percona_xtradb_cluster_5_6:coreos
 ExecStop=/usr/bin/docker stop galera-%i
 ExecStop=/usr/bin/docker rm galera-%i
+
+ExecStartPost=-/bin/rm /tmp/mysql-first-time.sql
+ExecStartPost=unset MYSQL_ROOT_PASSWORD
+ExecStartPost=unset WSREP_SST_PASSWORD
+ExecStartPost=/usr/bin/etcdctl set /domains/example.com/%H:%i running
 
 [X-Fleet]
 Conflicts=galera@*.service
