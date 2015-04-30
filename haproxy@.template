@@ -7,17 +7,19 @@ Requires=docker.service
 TimeoutStartSec=0
 EnvironmentFile=/etc/environment
 
-ExecStartPre=-/usr/bin/docker kill galera-%i
-ExecStartPre=-/usr/bin/docker rm galera-%i
+ExecStartPre=-/usr/bin/docker kill haproxy-%i
+ExecStartPre=-/usr/bin/docker rm haproxy-%i
 ExecStartPre=/usr/bin/docker pull entropyworks/docker-haproxy
 
 ExecStart=/usr/bin/docker run \
     --name haproxy-%i \
+    -e "ETCD_LISTEN_CLIENT_URLS=__ETC_LISTEN_CLIENT_URLS__" \
     -e "FLEETCTL_ENDPOINT=__FLEETCTL_ETC_ENDPOINT__" \
+    -p 33006:33006 -p 80:22002 \
     entropyworks/docker-haproxy
 
-ExecStop=/usr/bin/docker stop galera-%i
-ExecStop=/usr/bin/docker rm galera-%i
+ExecStop=/usr/bin/docker stop haproxy-%i
+ExecStop=/usr/bin/docker rm haproxy-%i
 
 [X-Fleet]
 Conflicts=haproxy@*.service
