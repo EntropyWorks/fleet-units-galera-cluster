@@ -1,0 +1,24 @@
+[Unit]
+Description=HAProxy for Galera Cluster
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/etc/environment
+
+ExecStartPre=-/usr/bin/docker kill galera-%i
+ExecStartPre=-/usr/bin/docker rm galera-%i
+ExecStartPre=/usr/bin/docker pull entropyworks/docker-haproxy
+
+ExecStart=/usr/bin/docker run \
+    --name haproxy-%i \
+    -e "FLEETCTL_ENDPOINT=__FLEETCTL_ETC_ENDPOINT__" \
+    entropyworks/docker-haproxy
+
+ExecStop=/usr/bin/docker stop galera-%i
+ExecStop=/usr/bin/docker rm galera-%i
+
+[X-Fleet]
+Conflicts=haproxy@*.service
+MachineMetadata=role=minion
