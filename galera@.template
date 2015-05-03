@@ -20,11 +20,6 @@ ExecStart=/usr/bin/docker run --name galera-%i \
 ExecStop=/usr/bin/docker stop galera-%i
 ExecStop=/usr/bin/docker rm galera-%i
 
-ExecStartPost=-/bin/rm /tmp/mysql-first-time.sql
-ExecStartPost=unset MYSQL_ROOT_PASSWORD
-ExecStartPost=unset WSREP_SST_PASSWORD
-ExecStartPost=/usr/bin/etcdctl set /domains/example.com/%H:%i running
-
 [X-Fleet]
 Conflicts=galera@*.service
 MachineMetadata=role=minion
